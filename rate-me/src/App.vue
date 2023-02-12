@@ -1,29 +1,33 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-</script>
+<script setup></script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+  <q-layout view="hHh lpR fFf">
+    <q-header reveal elevated class="bg-primary text-white">
+      <q-toolbar class="q-my-md">
+        <q-toolbar-title class="flex items-center">
+          <q-avatar>
+            <i class="fa-solid fa-angle-left"></i>
+          </q-avatar>
+          <div class="">Home</div>
+        </q-toolbar-title>
+        <div class="text-h4 q-mx-lg"><i class="fa-solid fa-ellipsis"></i></div>
+      </q-toolbar>
+    </q-header>
+
+    <q-page-container>
+      <router-view />
+    </q-page-container>
+
+    <q-footer class="bg-white">
+      <q-toolbar>
+        <q-toolbar-title> </q-toolbar-title>
+      </q-toolbar>
+    </q-footer>
+  </q-layout>
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+<style lang="scss" scoped>
+q-layout {
+  background-color: $primary !important;
 }
 </style>
