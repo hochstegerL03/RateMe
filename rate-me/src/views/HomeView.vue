@@ -28,7 +28,7 @@ import { ref } from 'vue';
         <div class="col-6 q-my-md">Total:</div>
         <div class="col-6 q-my-md text-italic text-h5">0</div>
         <div class="col-12 text-center q-mt-lg">
-          <q-btn size="lg" push color="primary" class="leave absolute-bottom q-mb-xl text-center"
+          <q-btn size="lg" push color="primary" class="leave absolute-bottom  text-center"
             >Leave</q-btn
           >
         </div>

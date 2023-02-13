@@ -1,8 +1,11 @@
 <script setup>
 import { ref } from 'vue';
 import QuasarHeader from '../components/QuasarHeader.vue';
+
+const activeCard = ref();
+const cardEditor = ref();
+const changeTitel = ref(false);
 const search = ref('');
-const stars = ref(5);
 const cards = ref([
   {
     id: 1,
@@ -60,6 +63,11 @@ const cards = ref([
     date: '20.12.2022',
   },
 ]);
+
+function openDialog(card) {
+  activeCard.value = card;
+  cardEditor.value = true;
+}
 </script>
 
 <template>
@@ -110,13 +118,8 @@ const cards = ref([
         <!--Cards-->
         <div class="w-80 q-mt-lg">
           <div>
-            <q-card
-              @click="$router.push('/card')"
-              class="rate-card q-my-xl"
-              v-for="card in cards"
-              :key="card.id"
-            >
-              <q-img :src="card.image">
+            <q-card class="rate-card q-my-xl" v-for="card in cards" :key="card.id">
+              <q-img :src="card.image" @click="openDialog(card)">
                 <div class="bg-transparent highlighted-text">
                   <div class="q-pa-sm">
                     <div class="text-h4 text-weight-bold">{{ card.title }}</div>
@@ -157,11 +160,32 @@ const cards = ref([
           </div>
         </div>
         <!--Cards End-->
-        <div class="w-80 flex justify-center q-mb-xl">
-          <i class="fa-solid fa-plus fa-5x icon-plus q-mb-xl"></i>
+        <div class="w-80 flex justify-center">
+          <i @click="$router.push('/card')" class="fa-solid fa-plus fa-5x icon-plus q-mb-xl"></i>
         </div>
       </div>
       <!--Body-->
+
+      <!--Dialog-->
+      <q-dialog v-if="activeCard" v-model="cardEditor" position="bottom">
+        <q-card class="cardEditor">
+          <q-card-section class="row items-center justify-center q-mt-lg">
+            <q-input
+              :disable="!changeTitel"
+              :placeholder="activeCard.title"
+              v-model="activeCard.title"
+            />
+            <i class="q-ml-lg fa-solid fa-pen fa-xl" @click="changeTitel = !changeTitel"></i>
+          </q-card-section>
+          <q-card-section class="flex justify-center">
+            <div class="w-80">
+              <div class="badge"><i class="q-ml-lg fa-solid fa-pen fa-xl"></i></div>
+              <q-img class="borderedImage" :src="activeCard.image"></q-img>
+            </div>
+          </q-card-section>
+        </q-card>
+      </q-dialog>
+      <!--Dialog End-->
     </div>
   </div>
 </template>
@@ -201,5 +225,21 @@ const cards = ref([
 
 .icon-plus {
   color: $accent;
+}
+
+.cardEditor {
+  width: 100% !important;
+  height: 80vh !important;
+  border-radius: 50px 50px 0px 0px;
+}
+
+.borderedImage {
+  border-radius: 1rem !important;
+}
+
+.badge {
+  transform: translate(75%, 100%);
+  background-color: white !important;
+  z-index: 1;
 }
 </style>
