@@ -2,9 +2,7 @@
 
 <template>
   <q-layout view="hHh lpR fFf">
-    
-
-    <q-page-container>
+    <q-page-container class="h-100">
       <router-view />
     </q-page-container>
 
@@ -19,5 +17,8 @@
 <style lang="scss" scoped>
 q-layout {
   background-color: $primary !important;
+}
+.h-100 {
+  height: 100vh;
 }
 </style>

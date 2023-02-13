@@ -110,7 +110,12 @@ const cards = ref([
         <!--Cards-->
         <div class="w-80 q-mt-lg">
           <div>
-            <q-card class="rate-card q-my-xl" v-for="card in cards" :key="card.id">
+            <q-card
+              @click="$router.push('/card')"
+              class="rate-card q-my-xl"
+              v-for="card in cards"
+              :key="card.id"
+            >
               <q-img :src="card.image">
                 <div class="bg-transparent highlighted-text">
                   <div class="q-pa-sm">
@@ -152,8 +157,8 @@ const cards = ref([
           </div>
         </div>
         <!--Cards End-->
-        <div class="w-80 flex justify-center q-mb-lg">
-          <i class="fa-solid fa-plus fa-5x icon-plus"></i>
+        <div class="w-80 flex justify-center q-mb-xl">
+          <i class="fa-solid fa-plus fa-5x icon-plus q-mb-xl"></i>
         </div>
       </div>
       <!--Body-->
