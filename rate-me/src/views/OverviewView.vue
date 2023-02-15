@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import QuasarHeader from '../components/QuasarHeader.vue';
 
 const activeCard = ref();
+const detailImage = ref(false);
 const cardEditor = ref();
 const changeTitel = ref(false);
 const search = ref('');
@@ -67,6 +68,11 @@ const cards = ref([
 function openDialog(card) {
   activeCard.value = card;
   cardEditor.value = true;
+}
+
+function saveChanges(tag, el, id) {
+  el = document.getElementById(el).textContent;
+  cards.value[cards.value.findIndex((el) => el.id == id)][tag] = el;
 }
 </script>
 
@@ -170,22 +176,76 @@ function openDialog(card) {
       <q-dialog v-if="activeCard" v-model="cardEditor" position="bottom">
         <q-card class="cardEditor">
           <q-card-section class="row items-center justify-center q-mt-lg">
-            <q-input
-              :disable="!changeTitel"
-              :placeholder="activeCard.title"
-              v-model="activeCard.title"
-            />
-            <i class="q-ml-lg fa-solid fa-pen fa-xl" @click="changeTitel = !changeTitel"></i>
+            <div id="acTitle" contenteditable="true" class="text-h5 text-weight-bold">
+              {{ activeCard.title }}
+            </div>
+            <i
+              class="q-ml-lg fa-solid fa-pen fa-xl"
+              @click="saveChanges('title', 'acTitle', activeCard.id)"
+            ></i>
           </q-card-section>
           <q-card-section class="flex justify-center">
             <div class="w-80">
-              <div class="badge"><i class="q-ml-lg fa-solid fa-pen fa-xl"></i></div>
-              <q-img class="borderedImage" :src="activeCard.image"></q-img>
+              <q-img @click="detailImage = true" class="borderedImage" :src="activeCard.image">
+                <div class="bg-transparent flex justify-end w-100">
+                  <div class="hovericon flex justify-center items-center">
+                    <i class="fa-solid fa-pen fa-lg" @click="changeTitel = !changeTitel"></i>
+                  </div>
+                </div>
+              </q-img>
             </div>
+          </q-card-section>
+          <q-card-section class="flex justify-center">
+            <div class="w-80">
+              <div class="row justify-center">
+                <div class="w-80">
+                  <span class="text-body1 text-weight-bold">Subtitle: </span>
+                  <span id="acSubtitle" contenteditable="true">{{ activeCard.subtitle }}</span>
+                </div>
+                <i
+                  class="q-ml-md fa-solid fa-pen fa-lg"
+                  @click="saveChanges('subtitle', 'acSubtitle', activeCard.id)"
+                ></i>
+              </div>
+            </div>
+            <div class="w-80 q-mt-md">
+              <div class="row justify-center">
+                <div class="w-80">
+                  <span class="text-body1 text-weight-bold">Description: </span>
+                  <span id="acDescription" contenteditable="true">{{
+                    activeCard.description
+                  }}</span>
+                </div>
+                <i
+                  class="q-ml-md fa-solid fa-pen fa-lg"
+                  @click="saveChanges('description', 'acDescription', activeCard.id)"
+                ></i>
+              </div>
+            </div>
+            <div class="w-80 q-mt-md">
+              <div class="row justify-center">
+                <div class="w-80">
+                  <span class="text-body1 text-weight-bold">Details: </span>
+                  <span id="acDetails" contenteditable="true">{{ activeCard.details }}</span>
+                </div>
+                <i
+                  class="q-ml-md fa-solid fa-pen fa-lg"
+                  @click="saveChanges('details', 'acDetails', activeCard.id)"
+                ></i>
+              </div>
+            </div>
+          </q-card-section>
+          <q-card-section class="flex justify-center">
+            <q-rating v-model="activeCard.rating" :max="5" size="300%" color="info" />
           </q-card-section>
         </q-card>
       </q-dialog>
       <!--Dialog End-->
+      <!--Image Dialog-->
+      <q-dialog v-model="detailImage">
+        <q-img class="borderedImage" :src="activeCard.image"> </q-img>
+      </q-dialog>
+      <!--Image Dialog End-->
     </div>
   </div>
 </template>
@@ -204,6 +264,10 @@ function openDialog(card) {
 
 .w-80 {
   width: 80%;
+}
+
+.w-100 {
+  width: 100%;
 }
 
 .card-text {
@@ -235,11 +299,14 @@ function openDialog(card) {
 
 .borderedImage {
   border-radius: 1rem !important;
+  width: 100%;
 }
 
-.badge {
-  transform: translate(75%, 100%);
+.hovericon {
   background-color: white !important;
-  z-index: 1;
+  color: black;
+  border-radius: 100%;
+  width: 30px;
+  height: 30px;
 }
 </style>
