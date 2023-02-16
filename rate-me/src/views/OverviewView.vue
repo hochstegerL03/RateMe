@@ -7,6 +7,7 @@ const detailImage = ref(false);
 const cardEditor = ref();
 const changeTitel = ref(false);
 const search = ref('');
+const categories = ref(['Food', 'Sport', 'Others']);
 const cards = ref([
   {
     id: 1,
@@ -189,7 +190,10 @@ function saveChanges(tag, el, id) {
               <q-img @click="detailImage = true" class="borderedImage" :src="activeCard.image">
                 <div class="bg-transparent flex justify-end w-100">
                   <div class="hovericon flex justify-center items-center">
-                    <i class="fa-solid fa-pen fa-lg" @click="changeTitel = !changeTitel"></i>
+                    <i
+                      class="q-ma-md fa-solid fa-pen fa-lg"
+                      @click="changeTitel = !changeTitel"
+                    ></i>
                   </div>
                 </div>
               </q-img>
@@ -197,18 +201,6 @@ function saveChanges(tag, el, id) {
           </q-card-section>
           <q-card-section class="flex justify-center">
             <div class="w-80">
-              <div class="row justify-center">
-                <div class="w-80">
-                  <span class="text-body1 text-weight-bold">Subtitle: </span>
-                  <span id="acSubtitle" contenteditable="true">{{ activeCard.subtitle }}</span>
-                </div>
-                <i
-                  class="q-ml-md fa-solid fa-pen fa-lg"
-                  @click="saveChanges('subtitle', 'acSubtitle', activeCard.id)"
-                ></i>
-              </div>
-            </div>
-            <div class="w-80 q-mt-md">
               <div class="row justify-center">
                 <div class="w-80">
                   <span class="text-body1 text-weight-bold">Description: </span>
@@ -225,6 +217,18 @@ function saveChanges(tag, el, id) {
             <div class="w-80 q-mt-md">
               <div class="row justify-center">
                 <div class="w-80">
+                  <span class="text-body1 text-weight-bold">Subtitle: </span>
+                  <span id="acSubtitle" contenteditable="true">{{ activeCard.subtitle }}</span>
+                </div>
+                <i
+                  class="q-ml-md fa-solid fa-pen fa-lg"
+                  @click="saveChanges('subtitle', 'acSubtitle', activeCard.id)"
+                ></i>
+              </div>
+            </div>
+            <div class="w-80 q-mt-md">
+              <div class="row justify-center">
+                <div class="w-80">
                   <span class="text-body1 text-weight-bold">Details: </span>
                   <span id="acDetails" contenteditable="true">{{ activeCard.details }}</span>
                 </div>
@@ -232,6 +236,16 @@ function saveChanges(tag, el, id) {
                   class="q-ml-md fa-solid fa-pen fa-lg"
                   @click="saveChanges('details', 'acDetails', activeCard.id)"
                 ></i>
+              </div>
+            </div>
+            <div class="w-80 q-mt-md">
+              <div class="row justify-center">
+                <q-select
+                  class="w-80 q-mt-md text-center"
+                  
+                  v-model="activeCard.category"
+                  :options="categories"
+                />
               </div>
             </div>
           </q-card-section>
