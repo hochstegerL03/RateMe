@@ -1,70 +1,21 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import QuasarHeader from '../components/QuasarHeader.vue';
+import { useCardStore } from '../store/cardStore.js';
 
+const cardStore = useCardStore();
 const activeCard = ref();
 const detailImage = ref(false);
 const cardEditor = ref();
 const changeTitel = ref(false);
 const search = ref('');
 const categories = ref(['Food', 'Sport', 'Others']);
-const cards = ref([
-  {
-    id: 1,
-    title: 'Good Food',
-    description: 'Very good',
-    image: 'https://cdn.pixabay.com/photo/2014/10/19/20/59/hamburger-494706_960_720.jpg',
-    category: 'Food',
-    rating: 5,
-    subtitle: 'Look what I found',
-    details: 'Very yummy, I must say. Would go there again :)',
-    date: '10.10.2022',
-  },
-  {
-    id: 2,
-    title: 'Meh Food',
-    description: 'Not very good',
-    image: 'https://cdn.pixabay.com/photo/2020/07/29/08/33/coffee-5447420_960_720.jpg',
-    category: 'Food',
-    rating: 1,
-    subtitle: 'They taste weird',
-    details: 'Idk why but they dont taste like yummy coffee',
-    date: '1.11.2022',
-  },
-  {
-    id: 3,
-    title: 'Best Sport',
-    description: 'Just best',
-    image: 'https://cdn.pixabay.com/photo/2020/07/08/08/04/sunset-5383040_960_720.jpg',
-    category: 'Sport',
-    rating: 5,
-    subtitle: 'Basketball',
-    details: 'Who doesnt love it?',
-    date: '9.11.2022',
-  },
-  {
-    id: 4,
-    title: 'Weird Sport',
-    description: 'Very weird',
-    image: 'https://cdn.pixabay.com/photo/2017/11/19/14/49/american-football-2962949_960_720.jpg',
-    category: 'Sport',
-    rating: 3,
-    subtitle: 'I dont know what this is',
-    details: 'Help me',
-    date: '10.12.2022',
-  },
-  {
-    id: 5,
-    title: 'Good Food #2',
-    description: 'Very Good',
-    image: 'https://cdn.pixabay.com/photo/2014/10/19/20/59/hamburger-494706_960_720.jpg',
-    category: 'Food',
-    rating: 5,
-    subtitle: 'Look what I found again!',
-    details: 'Very yummy, I must say. Would go there again :)',
-    date: '20.12.2022',
-  },
-]);
+const cards = ref([]);
+
+onMounted(async () => {
+  await cardStore.getCards();
+  cards.value = cardStore.cards;
+});
 
 function openDialog(card) {
   activeCard.value = card;
@@ -176,24 +127,26 @@ function saveChanges(tag, el, id) {
       <!--Dialog-->
       <q-dialog v-if="activeCard" v-model="cardEditor" position="bottom">
         <q-card class="cardEditor">
-          <q-card-section class="row items-center justify-center q-mt-lg">
-            <div id="acTitle" contenteditable="true" class="text-h5 text-weight-bold">
-              {{ activeCard.title }}
+          <q-card-section>
+            <div class="row items-center justify-center q-mt-lg">
+              <div id="acTitle" contenteditable="true" class="text-h5 text-weight-bold">
+                {{ activeCard.title }}
+              </div>
+              <i
+                class="q-ml-lg fa-solid fa-pen fa-xl"
+                @click="saveChanges('title', 'acTitle', activeCard.id)"
+              ></i>
+              <q-popup-edit v-model="activeCard.title" v-slot="scope" auto-save>
+                <q-input v-model="scope.value" dense autofocus @keyup.enter="scope.set" />
+              </q-popup-edit>
             </div>
-            <i
-              class="q-ml-lg fa-solid fa-pen fa-xl"
-              @click="saveChanges('title', 'acTitle', activeCard.id)"
-            ></i>
           </q-card-section>
           <q-card-section class="flex justify-center">
             <div class="w-80">
               <q-img @click="detailImage = true" class="borderedImage" :src="activeCard.image">
                 <div class="bg-transparent flex justify-end w-100">
                   <div class="hovericon flex justify-center items-center">
-                    <i
-                      class="q-ma-md fa-solid fa-pen fa-lg"
-                      @click="changeTitel = !changeTitel"
-                    ></i>
+                    <i class="q-ma-md fa-solid fa-pen fa-lg" @click=""></i>
                   </div>
                 </div>
               </q-img>
@@ -204,45 +157,69 @@ function saveChanges(tag, el, id) {
               <div class="row justify-center">
                 <div class="w-80">
                   <span class="text-body1 text-weight-bold">Description: </span>
-                  <span id="acDescription" contenteditable="true">{{
-                    activeCard.description
-                  }}</span>
+                  <span id="acDescription">{{ activeCard.description }} </span>
                 </div>
                 <i
                   class="q-ml-md fa-solid fa-pen fa-lg"
                   @click="saveChanges('description', 'acDescription', activeCard.id)"
                 ></i>
+                <q-popup-edit
+                  v-model="activeCard.description"
+                  v-slot="scope"
+                  auto-save
+                  :cover="false"
+                  self="top start"
+                >
+                  <q-input v-model="scope.value" dense autofocus @keyup.enter="scope.set" />
+                </q-popup-edit>
               </div>
             </div>
             <div class="w-80 q-mt-md">
               <div class="row justify-center">
                 <div class="w-80">
                   <span class="text-body1 text-weight-bold">Subtitle: </span>
-                  <span id="acSubtitle" contenteditable="true">{{ activeCard.subtitle }}</span>
+                  <span id="acSubtitle" contenteditable="true">{{ activeCard.subtitle }} </span>
                 </div>
                 <i
                   class="q-ml-md fa-solid fa-pen fa-lg"
                   @click="saveChanges('subtitle', 'acSubtitle', activeCard.id)"
                 ></i>
+                <q-popup-edit
+                  v-model="activeCard.subtitle"
+                  v-slot="scope"
+                  auto-save
+                  :cover="false"
+                  self="top start"
+                >
+                  <q-input v-model="scope.value" dense autofocus @keyup.enter="scope.set" />
+                </q-popup-edit>
               </div>
             </div>
             <div class="w-80 q-mt-md">
               <div class="row justify-center">
                 <div class="w-80">
                   <span class="text-body1 text-weight-bold">Details: </span>
-                  <span id="acDetails" contenteditable="true">{{ activeCard.details }}</span>
+                  <span id="acDetails" contenteditable="true">{{ activeCard.details }} </span>
                 </div>
                 <i
                   class="q-ml-md fa-solid fa-pen fa-lg"
                   @click="saveChanges('details', 'acDetails', activeCard.id)"
                 ></i>
+                <q-popup-edit
+                  v-model="activeCard.details"
+                  v-slot="scope"
+                  auto-save
+                  :cover="false"
+                  self="top start"
+                >
+                  <q-input v-model="scope.value" dense autofocus @keyup.enter="scope.set" />
+                </q-popup-edit>
               </div>
             </div>
             <div class="w-80 q-mt-md">
               <div class="row justify-center">
                 <q-select
                   class="w-80 q-mt-md text-center"
-                  
                   v-model="activeCard.category"
                   :options="categories"
                 />
