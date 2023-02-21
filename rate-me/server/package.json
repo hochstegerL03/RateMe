@@ -1,7 +1,7 @@
 {
-  "name": "employees-server",
+  "name": "rate-me-server",
   "version": "1.0.0",
-  "description": "Simple server for our PWA app",
+  "description": "Server for our rates",
   "main": "app.js",
   "type": "module",
   "scripts": {

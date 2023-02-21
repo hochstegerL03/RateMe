@@ -1,6 +1,6 @@
 import jsonServer from 'json-server';
 const server = jsonServer.create();
-const router = jsonServer.router('employees.json');
+const router = jsonServer.router('ratings.json');
 const middlewares = jsonServer.defaults();
 const port = process.env.PORT || 3000;
 
