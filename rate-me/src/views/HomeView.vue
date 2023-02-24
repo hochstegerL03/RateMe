@@ -6,10 +6,12 @@ import { ref } from 'vue';
   <div class="h-100">
     <div class="flex justify-center items-center h-20">
       <div>
-        <div class="text-h3 text-center">Rate Me!</div>
+        <div class="text-h3 text-center q-mt-xl">
+          <q-img src="/svgs/logo.svg"></q-img>
+        </div>
         <div>
           <figcaption class="text-center text-weight-light text-italic q-mt-xs q-mb-lg">
-            Snap, Rate and go! Make your life a rating game
+            Snap, Rate and go!
           </figcaption>
         </div>
       </div>
@@ -28,7 +30,7 @@ import { ref } from 'vue';
         <div class="col-6 q-my-md">Total:</div>
         <div class="col-6 q-my-md text-italic text-h5">0</div>
         <div class="col-12 text-center q-mt-lg">
-          <q-btn size="lg" push color="primary" class="leave absolute-bottom  text-center"
+          <q-btn size="lg" push color="primary" class="leave absolute-bottom text-center"
             >Leave</q-btn
           >
         </div>
