@@ -11,6 +11,7 @@ const changeTitel = ref(false);
 const search = ref('');
 const categories = ref(['Food', 'Sport', 'Others']);
 const cards = ref([]);
+const newCords = ref('Test');
 
 onMounted(async () => {
   await cardStore.getCards();
@@ -23,8 +24,7 @@ function openDialog(card) {
 }
 
 function openMap(x, y) {
-  console.log('TEst');
-  window.open(`https://www.google.at/maps/@${x},${y},21z`);
+  window.open(`https://www.google.at/maps/@${x},${y},10z`);
 }
 
 function saveChanges(tag, el, id) {
