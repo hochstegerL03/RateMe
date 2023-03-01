@@ -31,6 +31,12 @@ function saveChanges(tag, el, id) {
   el = document.getElementById(el).textContent;
   cards.value[cards.value.findIndex((el) => el.id == id)][tag] = el;
 }
+
+function getCoordinates() {
+  navigator.geolocation.getCurrentPosition(async (location) => {
+    newCords.value = await [location.coords.latitude, location.coords.longitude];
+  });
+}
 </script>
 
 <template>
@@ -59,6 +65,7 @@ function saveChanges(tag, el, id) {
         </div>
       </div>
       <!--Stats End-->
+      <q-btn @click="getCoordinates">{{ newCords }}</q-btn>
       <!--Body-->
       <div class="q-mt-xl flex justify-center">
         <!--Search Input-->
