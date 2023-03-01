@@ -22,6 +22,11 @@ function openDialog(card) {
   cardEditor.value = true;
 }
 
+function openMap(x, y) {
+  console.log('TEst');
+  window.open(`https://www.google.at/maps/@${x},${y},21z`);
+}
+
 function saveChanges(tag, el, id) {
   el = document.getElementById(el).textContent;
   cards.value[cards.value.findIndex((el) => el.id == id)][tag] = el;
@@ -88,6 +93,7 @@ function saveChanges(tag, el, id) {
 
               <q-card-section>
                 <q-btn
+                  @click="openMap(...card.location)"
                   fab
                   color="primary"
                   icon="place"

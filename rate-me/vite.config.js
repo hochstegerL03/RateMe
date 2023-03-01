@@ -1,3 +1,5 @@
+import { fileURLToPath, URL } from 'url';
+
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { quasar, transformAssetUrls } from '@quasar/vite-plugin';
@@ -24,6 +26,19 @@ export default defineConfig({
     }),
     VitePWA({
       manifest,
+      includeAssets: ['**/*.{js,css,html,jpg,ico,png,ttf,woff2}'],
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'service-worker.js',
     }),
   ],
+  build: {
+    outDir: './server/client',
+    // emptyOutDir: false,
+  },
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
 });
