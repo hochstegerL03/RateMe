@@ -1,5 +1,9 @@
-import data from './ratings.json' assert { type: 'json' };
-let { cards } = data;
+import fs from 'fs/promises';
+import path from 'path';
+
+const file = path.join(process.cwd(), './ratings.json');
+
+let { cards } = JSON.parse(await fs.readFile(file));
 
 const getCards = () => cards;
 const delCard = (id) => {
