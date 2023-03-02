@@ -3,8 +3,8 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import path from 'path';
 
-import cardsRouter from './api/routes/ratings.js';
-import { errorHandler, notFoundHandler } from './middleware/index.js';
+import cardsRouter from './src/api/routes/ratings.js';
+import { errorHandler, notFoundHandler } from './src/middleware/index.js';
 
 dotenv.config();
 const PORT = process.env.PORT ?? 3000;
