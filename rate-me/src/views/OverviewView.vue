@@ -11,7 +11,6 @@ const changeTitel = ref(false);
 const search = ref('');
 const categories = ref(['Food', 'Sport', 'Others']);
 const cards = ref([]);
-const newCords = ref('Test');
 
 onMounted(async () => {
   await cardStore.getCards();
@@ -30,12 +29,6 @@ function openMap(x, y) {
 function saveChanges(tag, el, id) {
   el = document.getElementById(el).textContent;
   cards.value[cards.value.findIndex((el) => el.id == id)][tag] = el;
-}
-
-function getCoordinates() {
-  navigator.geolocation.getCurrentPosition(async (location) => {
-    newCords.value = await [location.coords.latitude, location.coords.longitude];
-  });
 }
 </script>
 
@@ -65,7 +58,7 @@ function getCoordinates() {
         </div>
       </div>
       <!--Stats End-->
-      <q-btn @click="getCoordinates">{{ newCords }}</q-btn>
+
       <!--Body-->
       <div class="q-mt-xl flex justify-center">
         <!--Search Input-->

@@ -1,5 +1,12 @@
 <script setup>
 import { ref } from 'vue';
+
+function closeTab() {
+  setTimeout(function () {
+    let cw = window.open(window.location, '_self');
+    cw.close();
+  }, 1000);
+}
 </script>
 
 <template>
@@ -17,8 +24,8 @@ import { ref } from 'vue';
       </div>
     </div>
     <div class="flex justify-center items-center stats-overview">
-      <div class="stats q-pa-xl flex items-center">
-        <div @click="$router.push('/overview')" class="text-h4 text-weight-bold">Start</div>
+      <div @click="$router.push('/overview')" class="stats q-pa-xl flex items-center">
+        <div class="text-h4 text-weight-bold">Start</div>
       </div>
     </div>
     <div class="flex items-center stats-container text-white justify-center">
@@ -30,7 +37,12 @@ import { ref } from 'vue';
         <div class="col-6 q-my-md">Total:</div>
         <div class="col-6 q-my-md text-italic text-h5">0</div>
         <div class="col-12 text-center q-mt-lg">
-          <q-btn size="lg" push color="primary" class="leave absolute-bottom text-center"
+          <q-btn
+            @click="closeTab"
+            size="lg"
+            push
+            color="primary"
+            class="leave absolute-bottom text-center"
             >Leave</q-btn
           >
         </div>
