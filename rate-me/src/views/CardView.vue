@@ -155,7 +155,7 @@ function takePhoto() {
       <div class="preview cover">
         <div class="flex justify-end cover">
           <div class="previewImg q-mt-md q-mr-md">
-            <q-img v-if="!newCard.image == ''" :src="newCard.image" />
+            <q-img v-if="!newCard.image == ''" :src="newCard.image" class="elevated" />
           </div>
         </div>
       </div>
@@ -204,5 +204,9 @@ function takePhoto() {
 .previewImg {
   width: 160px;
   height: 90px;
+}
+
+.elevated {
+  box-shadow: 2px 2px 10px black;
 }
 </style>
