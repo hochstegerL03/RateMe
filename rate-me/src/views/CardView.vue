@@ -187,6 +187,7 @@ function takePhoto() {
 
 .camera {
   width: 100%;
+  height: 45vh;
   position: absolute;
   z-index: 1 !important;
 }
