@@ -63,8 +63,9 @@ function getStream() {
   }
 
   let constraints = {
-    video: true,
-    facingMode: { exact: 'environment' },
+    video: {
+      facingMode: 'environment',
+    },
   };
 
   getUserMedia(
@@ -163,10 +164,17 @@ function takePhoto() {
     </div>
 
     <div class="flex justify-center q-mt-md">
-      <div @click="takePhoto" class="snap q-pa-sm flex items-center">
+      <div @click="takePhoto" class="snap q-pa-sm q-mb-md flex items-center">
         <div class="text-weight-bold">
-          <span>Take Photos!</span>
+          <span>Take Photo!</span>
         </div>
+      </div>
+      <div>
+        <q-input v-model="newCard.title" label="Title" />
+        <q-input v-model="newCard.description" label="Description" />
+        <q-input v-model="newCard.subtitle" label="Subtitle" />
+        <q-input v-model="newCard.details" label="Details" />
+        
       </div>
     </div>
   </div>
