@@ -165,7 +165,7 @@ function takePhoto() {
     <div class="flex justify-center q-mt-md">
       <div @click="takePhoto" class="snap q-pa-sm flex items-center">
         <div class="text-weight-bold">
-          <span>Take Photo!</span>
+          <span>Take Photos!</span>
         </div>
       </div>
     </div>
