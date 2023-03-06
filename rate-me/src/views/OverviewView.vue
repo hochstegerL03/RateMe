@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue';
 import QuasarHeader from '../components/QuasarHeader.vue';
 import { useCardStore } from '../store/cardStore.js';
 import { Notify } from 'quasar';
+import axios from 'axios';
 
 const cardStore = useCardStore();
 const activeCard = ref();
@@ -19,7 +20,10 @@ onMounted(async () => {
 });
 
 async function deleteCard(id) {
+  console.log('HEY');
   await axios.delete(`/cards/${id}`);
+  await cardStore.getCards();
+  cards.value = cardStore.cards;
   Notify.create({
     message: 'Deleted',
     color: 'negative',
@@ -54,7 +58,7 @@ function saveChanges(tag, el, id) {
 <template>
   <div>
     <QuasarHeader></QuasarHeader>
-    <div class="">
+    <div class="bg-white">
       <!--Stats-->
       <div class="bubble bg-primary flex justify-around items-center">
         <div>

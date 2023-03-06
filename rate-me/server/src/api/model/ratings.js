@@ -7,7 +7,7 @@ let { cards } = JSON.parse(await fs.readFile(file));
 
 const getCards = () => cards;
 const delCard = (id) => {
-  
+  console.log('Fuck');
   const index = cards.findIndex((el) => el.id === id);
   if (index === -1) return 404;
   cards.splice(index, 1);

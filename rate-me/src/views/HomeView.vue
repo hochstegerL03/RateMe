@@ -10,7 +10,7 @@ function closeTab() {
 </script>
 
 <template>
-  <div class="h-100">
+  <div class="h-100 bg-white">
     <div class="flex justify-center items-center h-20">
       <div>
         <div class="text-h3 text-center q-mt-xl">

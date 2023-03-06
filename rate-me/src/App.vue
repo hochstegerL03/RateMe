@@ -71,7 +71,7 @@ function updateNotify() {
 
 <template>
   <q-layout view="hHh lpR fFf">
-    <q-page-container class="h-100">
+    <q-page-container class="h-100 bg-primary">
       <router-view />
     </q-page-container>
   </q-layout>

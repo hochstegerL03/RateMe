@@ -225,7 +225,7 @@ function takePhoto() {
 </script>
 
 <template>
-  <div>
+  <div class="bg-white">
     <QuasarHeader></QuasarHeader>
     <div class="cameraContainer">
       <video id="cameraStream" autoplay class="camera"></video>
