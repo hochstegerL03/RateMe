@@ -26,4 +26,15 @@ const postCard = (newCard) => {
   return 204;
 };
 
-export { getCards, delCard, postCard };
+const putCard = (card) => {
+  console.log(card.title);
+  const index = cards.findIndex((el) => el.id === card.id);
+  console.log(cards[index]);
+  if (index === -1) return 404;
+  cards[index] = card;
+  const cardList = { cards: cards };
+  fs.writeFile('./ratings.json', JSON.stringify(cardList));
+  return 204;
+};
+
+export { getCards, delCard, postCard, putCard };

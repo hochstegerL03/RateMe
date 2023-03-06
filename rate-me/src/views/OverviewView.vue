@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch, unref } from 'vue';
 import QuasarHeader from '../components/QuasarHeader.vue';
 import { useCardStore } from '../store/cardStore.js';
 import { Notify } from 'quasar';
@@ -13,6 +13,17 @@ const changeTitel = ref(false);
 const search = ref('');
 const categories = ref(['Food', 'Sport', 'Others']);
 const cards = ref([]);
+
+watch(cardEditor, async (newV, oldV) => {
+  console.log(activeCard.value.id);
+  console.log(cards.value.find((el) => el.id == activeCard.value.id));
+  if (
+    newV == false &&
+    activeCard.value != cards.value.find((el) => el.id == activeCard.value.id).id
+  ) {
+    saveChanges();
+  }
+});
 
 onMounted(async () => {
   await cardStore.getCards();
@@ -41,7 +52,7 @@ async function deleteCard(id) {
 }
 
 function openDialog(card) {
-  activeCard.value = card;
+  activeCard.value = unref({ ...card });
   cardEditor.value = true;
 }
 
@@ -49,9 +60,23 @@ function openMap(x, y) {
   window.open(`https://www.google.at/maps/@${x},${y},15z`);
 }
 
-function saveChanges(tag, el, id) {
-  el = document.getElementById(el).textContent;
-  cards.value[cards.value.findIndex((el) => el.id == id)][tag] = el;
+async function saveChanges() {
+  console.log(cards.value.find((el) => el.id == activeCard.id));
+  await axios.put(`/cards/${id}`, cards.value[cards.value.findIndex((el) => el.id == id)]);
+  Notify.create({
+    message: 'Saved',
+    color: 'negative',
+    position: 'bottom',
+    actions: [
+      {
+        label: 'Dismiss',
+        color: 'white',
+        handler: () => {
+          /* ... */
+        },
+      },
+    ],
+  });
 }
 </script>
 
@@ -154,17 +179,14 @@ function saveChanges(tag, el, id) {
       <!--Body-->
 
       <!--Dialog-->
-      <q-dialog v-if="activeCard" v-model="cardEditor" position="bottom">
+      <q-dialog @blur="saveChanges()" v-if="activeCard" v-model="cardEditor" position="bottom">
         <q-card class="cardEditor">
           <q-card-section>
             <div class="row items-center justify-center q-mt-lg">
               <div id="acTitle" contenteditable="true" class="text-h5 text-weight-bold">
                 {{ activeCard.title }}
               </div>
-              <i
-                class="q-ml-lg fa-solid fa-pen fa-xl"
-                @click="saveChanges('title', 'acTitle', activeCard.id)"
-              ></i>
+              <i class="q-ml-lg fa-solid fa-pen fa-xl"></i>
               <q-popup-edit v-model="activeCard.title" v-slot="scope" auto-save>
                 <q-input v-model="scope.value" dense autofocus @keyup.enter="scope.set" />
               </q-popup-edit>
@@ -175,7 +197,7 @@ function saveChanges(tag, el, id) {
               <q-img @click="detailImage = true" class="borderedImage" :src="activeCard.image">
                 <div class="bg-transparent flex justify-end w-100">
                   <div class="hovericon flex justify-center items-center">
-                    <i class="q-ma-md fa-solid fa-pen fa-lg" @click=""></i>
+                    <i class="q-ma-md fa-solid fa-pen fa-lg"></i>
                   </div>
                 </div>
               </q-img>
@@ -188,10 +210,7 @@ function saveChanges(tag, el, id) {
                   <span class="text-body1 text-weight-bold">Description: </span>
                   <span id="acDescription">{{ activeCard.description }} </span>
                 </div>
-                <i
-                  class="q-ml-md fa-solid fa-pen fa-lg"
-                  @click="saveChanges('description', 'acDescription', activeCard.id)"
-                ></i>
+                <i class="q-ml-md fa-solid fa-pen fa-lg"></i>
                 <q-popup-edit
                   v-model="activeCard.description"
                   v-slot="scope"
@@ -209,10 +228,7 @@ function saveChanges(tag, el, id) {
                   <span class="text-body1 text-weight-bold">Subtitle: </span>
                   <span id="acSubtitle" contenteditable="true">{{ activeCard.subtitle }} </span>
                 </div>
-                <i
-                  class="q-ml-md fa-solid fa-pen fa-lg"
-                  @click="saveChanges('subtitle', 'acSubtitle', activeCard.id)"
-                ></i>
+                <i class="q-ml-md fa-solid fa-pen fa-lg"></i>
                 <q-popup-edit
                   v-model="activeCard.subtitle"
                   v-slot="scope"
@@ -230,10 +246,7 @@ function saveChanges(tag, el, id) {
                   <span class="text-body1 text-weight-bold">Details: </span>
                   <span id="acDetails" contenteditable="true">{{ activeCard.details }} </span>
                 </div>
-                <i
-                  class="q-ml-md fa-solid fa-pen fa-lg"
-                  @click="saveChanges('details', 'acDetails', activeCard.id)"
-                ></i>
+                <i class="q-ml-md fa-solid fa-pen fa-lg"></i>
                 <q-popup-edit
                   v-model="activeCard.details"
                   v-slot="scope"
