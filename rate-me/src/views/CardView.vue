@@ -31,13 +31,49 @@ const imageUploader = async () => {
     axios(requestObj).then((res) => {
       let { data } = res;
       feedbackUrl.value = data.secure_url;
+      deployCard();
     });
   });
 };
 
-const deployCard = () => {
+const deployCard = async () => {
+  console.log(blobData.value);
   newCard.value.image = feedbackUrl.value;
-  console.log(newCard.value);
+  await axios.post('/cards', newCard.value);
+  Notify.create({
+    message: 'Saved',
+    color: 'negative',
+    position: 'bottom',
+    actions: [
+      {
+        label: 'Dismiss',
+        color: 'white',
+        handler: () => {
+          /* ... */
+        },
+      },
+    ],
+  });
+  onReset();
+};
+
+const onReset = () => {
+  newCard.value = {
+    id: '',
+    title: '',
+    description: '',
+    image: '',
+    category: '',
+    rating: 0,
+    subtitle: '',
+    details: '',
+    date: '',
+    location: [],
+  };
+  uploadData.value = null;
+  uploadContent.value = null;
+  feedbackUrl.value = null;
+  blobData.value = null;
 };
 
 let cameraStream;
@@ -180,7 +216,7 @@ function takePhoto() {
     .takePhoto()
     .then((blob) => {
       blobData.value = blob;
-      imageUploader();
+
       newCard.value.image = URL.createObjectURL(blob);
       getCoordinates();
     })
@@ -210,18 +246,24 @@ function takePhoto() {
     </div>
     <div class="flex justify-center q-mt-md">
       <div style="width: 80%">
-        <q-input v-model="newCard.title" label="Title" />
-        <q-input v-model="newCard.description" label="Description" />
-        <q-input v-model="newCard.subtitle" label="Subtitle" />
-        <q-input v-model="newCard.details" label="Details" />
-        <q-select v-model="newCard.category" :options="categories" label="Category" />
-        {{ newCard.location }}
-        <div class="flex justify-center">
-          <q-rating v-model="newCard.rating" :max="5" size="200%" color="info" class="q-mb-md" />
-        </div>
-        <div class="flex justify-center">
-          <q-btn flat color="primary" label="Save" @click="deployCard" class="q-mb-lg" />
-        </div>
+        <q-form @submit="imageUploader" @reset="onReset">
+          <div class="flex justify-end">
+            <q-btn type="reset" flat><i class="fa-solid fa-rotate-right"></i></q-btn>
+          </div>
+
+          <q-input v-model="newCard.title" label="Title" required />
+          <q-input v-model="newCard.description" label="Description" required />
+          <q-input v-model="newCard.subtitle" label="Subtitle" required />
+          <q-input v-model="newCard.details" label="Details" required />
+          <q-select v-model="newCard.category" :options="categories" label="Category" required />
+
+          <div class="flex justify-center">
+            <q-rating v-model="newCard.rating" :max="5" size="200%" color="info" class="q-mb-md" />
+          </div>
+          <div class="flex justify-center">
+            <q-btn flat color="primary" type="submit" label="Save" class="q-mb-lg" />
+          </div>
+        </q-form>
       </div>
     </div>
   </div>

@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import QuasarHeader from '../components/QuasarHeader.vue';
 import { useCardStore } from '../store/cardStore.js';
+import { Notify } from 'quasar';
 
 const cardStore = useCardStore();
 const activeCard = ref();
@@ -17,13 +18,31 @@ onMounted(async () => {
   cards.value = cardStore.cards;
 });
 
+async function deleteCard(id) {
+  await axios.delete(`/cards/${id}`);
+  Notify.create({
+    message: 'Deleted',
+    color: 'negative',
+    position: 'bottom',
+    actions: [
+      {
+        label: 'Dismiss',
+        color: 'white',
+        handler: () => {
+          /* ... */
+        },
+      },
+    ],
+  });
+}
+
 function openDialog(card) {
   activeCard.value = card;
   cardEditor.value = true;
 }
 
 function openMap(x, y) {
-  window.open(`https://www.google.at/maps/@${x},${y},10z`);
+  window.open(`https://www.google.at/maps/@${x},${y},15z`);
 }
 
 function saveChanges(tag, el, id) {
@@ -232,8 +251,19 @@ function saveChanges(tag, el, id) {
               </div>
             </div>
           </q-card-section>
-          <q-card-section class="flex justify-center">
-            <q-rating v-model="activeCard.rating" :max="5" size="300%" color="info" />
+          <q-card-section>
+            <div class="flex justify-center">
+              <q-rating v-model="activeCard.rating" :max="5" size="300%" color="info" />
+            </div>
+            <div class="flex justify-center">
+              <q-btn
+                flat
+                color="primary"
+                @click="deleteCard(activeCard.id)"
+                label="Delete"
+                class="q-mb-lg text-italic"
+              />
+            </div>
           </q-card-section>
         </q-card>
       </q-dialog>

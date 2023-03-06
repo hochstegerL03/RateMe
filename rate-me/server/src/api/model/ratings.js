@@ -7,18 +7,23 @@ let { cards } = JSON.parse(await fs.readFile(file));
 
 const getCards = () => cards;
 const delCard = (id) => {
+  
   const index = cards.findIndex((el) => el.id === id);
   if (index === -1) return 404;
   cards.splice(index, 1);
+  const cardList = { cards: cards };
+  fs.writeFile('./ratings.json', JSON.stringify(cardList));
   return 204;
 };
 
 const postCard = (newCard) => {
-  const newId = Math.max(cards.map((el) => el.id)) + 1;
-  console.log(newId);
-  console.log(newCard);
+  const newId = Math.max(...cards.map((el) => el.id)) + 1;
+  newCard.id = newId;
+  newCard.date = new Date().toJSON().slice(0, 10);
   cards.push(newCard);
-  fs.writeFile('./ratings.json', JSON.stringify(cards));
+  const cardList = { cards: cards };
+  fs.writeFile('./ratings.json', JSON.stringify(cardList));
+  return 204;
 };
 
-export { getCards, delCard };
+export { getCards, delCard, postCard };
