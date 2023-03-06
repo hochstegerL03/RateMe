@@ -64,6 +64,7 @@ function getStream() {
 
   let constraints = {
     video: true,
+    facingMode: { exact: 'environment' },
   };
 
   getUserMedia(

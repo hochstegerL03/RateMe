@@ -12,8 +12,8 @@ const PORT = process.env.PORT ?? 3000;
 const app = express();
 app.use(morgan('dev'));
 
-app.use(express.static(path.join(process.cwd(), '/public')));
 app.use(express.static(path.join(process.cwd(), '/client')));
+app.use('public', express.static(path.join(process.cwd(), '/public')));
 app.use(express.json());
 
 app.use('/cards', cardsRouter);
