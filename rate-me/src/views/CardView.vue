@@ -2,8 +2,46 @@
 import QuasarHeader from '../components/QuasarHeader.vue';
 import { ref, onMounted } from 'vue';
 import { Notify } from 'quasar';
+import axios from 'axios';
+
+const cloudName = 'dqxcfzewl';
+const uploadData = ref();
+const uploadContent = ref();
+const feedbackUrl = ref();
+const blobData = ref();
+
+const prepareData = () => {
+  uploadData.value = new FormData();
+  uploadData.value.append('upload_preset', 'rate-me');
+  uploadData.value.append('file', uploadContent.value);
+};
+
+const imageUploader = async () => {
+  console.log(blobData.value);
+  const reader = new FileReader();
+  reader.readAsDataURL(blobData.value);
+  reader.addEventListener('load', () => {
+    uploadContent.value = reader.result;
+    prepareData();
+    let requestObj = {
+      url: 'https://api.cloudinary.com/v1_1/rate-me/upload',
+      method: 'POST',
+      data: uploadData.value,
+    };
+    axios(requestObj).then((res) => {
+      let { data } = res;
+      feedbackUrl.value = data.secure_url;
+    });
+  });
+};
+
+const deployCard = () => {
+  newCard.value.image = feedbackUrl.value;
+  console.log(newCard.value);
+};
 
 let cameraStream;
+const categories = ref(['Food', 'Sport', 'Others']);
 const newCard = ref({
   id: '',
   title: '',
@@ -138,10 +176,11 @@ function takePhoto() {
   }
 
   let imageCapturer = new ImageCapture(cameraStream.getVideoTracks()[0]);
-  console.log(imageCapturer);
   imageCapturer
     .takePhoto()
     .then((blob) => {
+      blobData.value = blob;
+      imageUploader();
       newCard.value.image = URL.createObjectURL(blob);
       getCoordinates();
     })
@@ -162,19 +201,27 @@ function takePhoto() {
         </div>
       </div>
     </div>
-
     <div class="flex justify-center q-mt-md">
       <div @click="takePhoto" class="snap q-pa-sm q-mb-md flex items-center">
         <div class="text-weight-bold">
           <span>Take Photo!</span>
         </div>
       </div>
-      <div>
+    </div>
+    <div class="flex justify-center q-mt-md">
+      <div style="width: 80%">
         <q-input v-model="newCard.title" label="Title" />
         <q-input v-model="newCard.description" label="Description" />
         <q-input v-model="newCard.subtitle" label="Subtitle" />
         <q-input v-model="newCard.details" label="Details" />
-        
+        <q-select v-model="newCard.category" :options="categories" label="Category" />
+        {{ newCard.location }}
+        <div class="flex justify-center">
+          <q-rating v-model="newCard.rating" :max="5" size="200%" color="info" class="q-mb-md" />
+        </div>
+        <div class="flex justify-center">
+          <q-btn flat color="primary" label="Save" @click="deployCard" class="q-mb-lg" />
+        </div>
       </div>
     </div>
   </div>

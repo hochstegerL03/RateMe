@@ -13,4 +13,12 @@ const delCard = (id) => {
   return 204;
 };
 
+const postCard = (newCard) => {
+  const newId = Math.max(cards.map((el) => el.id)) + 1;
+  console.log(newId);
+  console.log(newCard);
+  cards.push(newCard);
+  fs.writeFile('./ratings.json', JSON.stringify(cards));
+};
+
 export { getCards, delCard };
