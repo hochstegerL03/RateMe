@@ -16,7 +16,7 @@ app.use(express.static(path.join(process.cwd(), '/client')));
 app.use('public', express.static(path.join(process.cwd(), '/public')));
 app.use(express.json());
 
-app.use('/cards', cardsRouter);
+app.use('/', cardsRouter);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

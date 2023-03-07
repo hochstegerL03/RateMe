@@ -21,6 +21,11 @@ const router = createRouter({
       name: 'card',
       component: CardView,
     },
+    {
+      path: '/:catchAll(.*)',
+      name: 'home',
+      component: HomeView,
+    },
   ],
 });
 
