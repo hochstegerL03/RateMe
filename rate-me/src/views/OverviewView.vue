@@ -15,12 +15,8 @@ const categories = ref(['Food', 'Sport', 'Others']);
 const cards = ref([]);
 
 watch(cardEditor, async (newV, oldV) => {
-  console.log(activeCard.value.id);
-  console.log(cards.value.find((el) => el.id == activeCard.value.id));
-  if (
-    newV == false &&
-    activeCard.value != cards.value.find((el) => el.id == activeCard.value.id).id
-  ) {
+  const card = cards.value.find((el) => el.id == activeCard.value.id);
+  if (newV == false && JSON.stringify(activeCard.value) != JSON.stringify(card)) {
     saveChanges();
   }
 });
@@ -61,8 +57,9 @@ function openMap(x, y) {
 }
 
 async function saveChanges() {
-  console.log(cards.value.find((el) => el.id == activeCard.id));
-  await axios.put(`/cards/${id}`, cards.value[cards.value.findIndex((el) => el.id == id)]);
+  await axios.put(`/cards/${activeCard.value.id}`, activeCard.value);
+  await cardStore.getCards();
+  cards.value = cardStore.cards;
   Notify.create({
     message: 'Saved',
     color: 'negative',

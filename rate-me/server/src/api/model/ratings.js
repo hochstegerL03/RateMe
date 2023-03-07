@@ -27,9 +27,9 @@ const postCard = (newCard) => {
 };
 
 const putCard = (card) => {
-  console.log(card.title);
   const index = cards.findIndex((el) => el.id === card.id);
   console.log(cards[index]);
+  console.log(card);
   if (index === -1) return 404;
   cards[index] = card;
   const cardList = { cards: cards };
