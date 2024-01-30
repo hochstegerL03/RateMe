@@ -4,7 +4,7 @@ import { ref, onMounted } from 'vue';
 import { Notify } from 'quasar';
 import axios from 'axios';
 
-const cloudName = 'dqxcfzewl';
+const cloudName = 'dr1qtazs8';
 const uploadData = ref();
 const uploadContent = ref();
 const feedbackUrl = ref();
